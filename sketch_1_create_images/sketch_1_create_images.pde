@@ -159,9 +159,15 @@ int[] sizes = {
 void setup() {
   // Images must be in the "data" directory to load correctly
   //  img = loadImage("laDefense.jpg");
-  frameRate(1);
+//  frameRate(1);
   //  int s = sizes[2];
   size(300, 300);
+}
+
+String imageSaveDir = "../images/";
+String imageSaveExt = "png";
+void saveImage(String name, int sampleNum) {
+  save(imageSaveDir+name+"_"+sampleNum+"."+imageSaveExt);
 }
 
 int frame = 0;
@@ -169,26 +175,35 @@ void draw() {
   //  image(img, 0, 0);
   int numFrames = 5;
   int f = frame % numFrames;
-  f = 4;
+//  f = 4;
+
+  if (frame > numFrames) {
+    exit();
+  }
   
   switch(f) {
     case 0:
       // Constant image
       constantImage(constantIntensity);
+      saveImage("constant_image", 1);
       break;
     case 1:
       whiteNoise();
+      saveImage("white_noise", 1);
       break;
     case 2:
       interestingNoise(100, -2, false);
+      saveImage("interesting_noise_1", 1);
       break;
     case 3:
       interestingNoise(10, -2, true);
+      saveImage("interesting_noise_2", 1);
       break;
     case 4:
       PVector p = randomPixelPoints(1)[0];
       float c = 1.0;
       gaussian(p, c);
+      saveImage("gaussian", 1);
       break;
     default: 
       println("Frame not found!");
