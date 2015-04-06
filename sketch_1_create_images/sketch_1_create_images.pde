@@ -19,7 +19,6 @@ PVector[] randomPixelPoints(int count) {
 }
 
 // Constant
-float constantIntensity = 200;
 void constantImage(float intensity) {
   background(intensity);
 }
@@ -149,7 +148,35 @@ void gaussian(PVector u, float c) {
 }
 
 // Stripes
-float theta = 0;
+// - theta - In degrees, orientation of the line
+// - thickness - number of pixels thickness of line 
+void stripes(float theta, float thickness) {
+  
+//  theta = theta % 90; // Max is 90 degree
+//  // Iterate over each horizonal row
+//  float opp = height * tan(radians(theta));
+//  for (int y = 0; y < 2*height; y++) {
+//      int row = (int) (y / thickness);
+//      boolean shouldSkip = row % 2 == 0; // Even or odd?
+//      if (shouldSkip) {
+//        line(0, y-opp, width, y);
+//      }
+//  }
+
+  // Iterate over each horizonal row
+  pushMatrix();
+  translate(width/2, height/2);
+  rotate(radians(theta));
+  for (int y = 0; y < 2*height; y++) {
+      int row = (int) (y / thickness);
+      boolean shouldSkip = row % 2 == 0; // Even or odd?
+      if (shouldSkip) {
+        line(-width, y-height, 2*width, y-height);
+      }
+  }
+  popMatrix();
+  
+}
 
 // Sizes
 int[] sizes = {
@@ -167,46 +194,59 @@ void setup() {
 String imageSaveDir = "../images/";
 String imageSaveExt = "png";
 void saveImage(String name, int sampleNum) {
-  save(imageSaveDir+name+"_"+sampleNum+"."+imageSaveExt);
+  save(imageSaveDir+name+"_"+width+"x"+height+"_"+(sampleNum+1)+"."+imageSaveExt);
 }
 
-int frame = 0;
-void draw() {
-  //  image(img, 0, 0);
-  int numFrames = 5;
-  int f = frame % numFrames;
-//  f = 4;
+int frame = 1;
+int numSamples = 3;
+int numFrames = 7;
 
-  if (frame > numFrames) {
+void draw() {
+  
+  stroke(255); // white
+  fill(0);
+  rect(0, 0, width, height);
+  
+  int f = frame % numFrames;
+  int s = (frame / numFrames);
+
+  if (s >= numSamples) {
     exit();
   }
   
   switch(f) {
-    case 0:
-      // Constant image
-      constantImage(constantIntensity);
-      saveImage("constant_image", 1);
-      break;
     case 1:
-      whiteNoise();
-      saveImage("white_noise", 1);
+      // Constant image
+      float constantIntensity = random(0, 255);
+      constantImage(constantIntensity);
+      saveImage("constant_image", s);
       break;
     case 2:
-      interestingNoise(100, -2, false);
-      saveImage("interesting_noise_1", 1);
+      whiteNoise();
+      saveImage("white_noise", s);
       break;
     case 3:
-      interestingNoise(10, -2, true);
-      saveImage("interesting_noise_2", 1);
+      interestingNoise(100, -2, false);
+      saveImage("interesting_noise_additively", s);
       break;
     case 4:
+      interestingNoise(10, -2, true);
+      saveImage("interesting_noise_multiplicatively", s);
+      break;
+    case 5:
       PVector p = randomPixelPoints(1)[0];
       float c = 1.0;
       gaussian(p, c);
-      saveImage("gaussian", 1);
+      saveImage("gaussian", s);
+      break;
+    case 6:
+      float theta = random(0,360);
+      float thickness = 10.0;
+      stripes(theta, thickness);
+      saveImage("stripes", s);
       break;
     default: 
-      println("Frame not found!");
+//      println("Frame not found:", f);
   }
 
   frame++;
