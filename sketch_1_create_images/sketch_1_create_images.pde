@@ -1,5 +1,28 @@
 PImage img;
 
+// Sizes
+int[] sizes = {
+  3, 10, 300
+};
+
+String imageSaveDir = "../original_images/";
+String imageSaveExt = "png";
+void saveImage(String name, int sampleNum) {
+  save(imageSaveDir+name+"_"+width+"x"+height+"_"+(sampleNum+1)+"."+imageSaveExt);
+}
+
+int frame = 1;
+int numSamples = 3;
+int numFrames = 7;
+
+void setup() {
+  // Images must be in the "data" directory to load correctly
+  //  img = loadImage("laDefense.jpg");
+//  frameRate(1);
+  //  int s = sizes[2];
+  size(300, 300);
+}
+
 // Helpers
 PVector pointFromPixel(int i) {
   int y = (int) i / width;
@@ -177,29 +200,6 @@ void stripes(float theta, float thickness) {
   popMatrix();
   
 }
-
-// Sizes
-int[] sizes = {
-  3, 10, 300
-};
-
-void setup() {
-  // Images must be in the "data" directory to load correctly
-  //  img = loadImage("laDefense.jpg");
-//  frameRate(1);
-  //  int s = sizes[2];
-  size(300, 300);
-}
-
-String imageSaveDir = "../images/";
-String imageSaveExt = "png";
-void saveImage(String name, int sampleNum) {
-  save(imageSaveDir+name+"_"+width+"x"+height+"_"+(sampleNum+1)+"."+imageSaveExt);
-}
-
-int frame = 1;
-int numSamples = 3;
-int numFrames = 7;
 
 void draw() {
   
