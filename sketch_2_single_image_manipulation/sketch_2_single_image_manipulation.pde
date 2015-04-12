@@ -4,6 +4,7 @@ ArrayList<PImage> originalImages;
 String imageDir;
 int imageIndex;
 int manipulatorIndex;
+float scale = 1.0;
 
 void setup() {
   size(300, 300); 
@@ -41,8 +42,19 @@ void keyPressed() {
     } else if (keyCode == UP) {
       manipulatorIndex++;
     }
-    redraw();
+  } else {
+    if (key == '-' || key == '_') {
+      scale -= 0.1;
+    } else if (key == '=' || key == '+') {
+      scale += 0.1;
+    } else if (key == 'r') {
+      // Reset
+      scale = 1.0;
+    } else {
+      println("Unkown key pressed:", key, keyCode);
+    } 
   }
+  redraw();
 }
 
 void draw() {
@@ -59,7 +71,9 @@ void draw() {
 
   img = originalImages.get(imageIndex);
   img.loadPixels();
-  image(img, 0, 0, width, height);
+  // Resize
+  image(img, 0, 0, width*scale, height*scale);
+  // Load pixels from render into pixels array that can be accessed
   loadPixels();
 
   String manipulatorName;
