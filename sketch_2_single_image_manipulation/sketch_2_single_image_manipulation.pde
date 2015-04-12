@@ -77,7 +77,7 @@ void draw() {
   loadPixels();
 
   String manipulatorName;
-  int manipulators = 2;
+  int manipulators = 5;
   if (manipulatorIndex > manipulators) {
     manipulatorIndex = 0;
   } else if (manipulatorIndex < 0) {
@@ -89,17 +89,29 @@ void draw() {
     equalize(pixels);
     updatePixels();
     break;
-    //    case 2:
-    //      manipulatorName = "normalize";      
-    //      normalization(pixels);
-    //      updatePixels();
-    //      break;
   case 2:
+    manipulatorName = "normalize";      
+    normalization(pixels);
+    updatePixels();
+    break;
+  case 3:
     fill(0);
     rect(0, 0, width, height);
     manipulatorName = "histogram";      
-    float[] hist = histogram(pixels, (int) width/1);
+    float[] hist = histogram(pixels, (int) width);
     drawHistogram(hist);
+    break;
+   case 4:
+    manipulatorName = "quantization(2)";      
+    color[] q1 = quantization(pixels, 2);
+    arrayCopy(q1, pixels);
+    updatePixels();
+    break;
+   case 5:
+    manipulatorName = "quantization(256)";      
+    color[] q2 = quantization(pixels, 256);
+    arrayCopy(q2, pixels);
+    updatePixels();
     break;
   default:
     manipulatorName = "none";
@@ -196,5 +208,20 @@ void drawHistogram(float[] histogram) {
     //    println(y, x, n, width);
     line(x, height, x, height - y);
   }
+}
+
+color[] quantization(color[] pixels, int n) {
+
+  color[] q = new color[pixels.length];
+
+  for (int p = 0; p < pixels.length; p++) {
+    float prev = brightness(pixels[p]);
+    int v = (int) ((float) prev * n / 256.0);
+    color c = color(v * (256.0/(n-1)));
+//    println(p, n, prev, v, brightness(c));
+    q[p] = c;
+  }
+
+  return q;
 }
 
