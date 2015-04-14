@@ -6,4 +6,5 @@ application.windows32
 application.windows64
 application.macosx
 
-images/
+original_images/*.png
+!original_images/photograph_*.png
